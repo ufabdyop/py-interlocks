@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>SUCCESS</title>
+
+
+</head>
+
+
+<body>
+    <p>Just sent interlock box command "{{ cmd }}".<br/>
+        The resulting bytes we got back were: <strong>{{ data }}</strong><br/>
+        This should be 85 to acknowledge command and an integer representing a<br/>
+        state from the table below:
+    </p>
+
+<style>
+    table {
+    border-collapse: collapse;
+    }
+    td {
+    border: 1px solid black;
+    }
+.blue {
+  background-color: blue;
+  color: white;
+}
+.green {
+  background-color: green;
+  color: white;
+}
+.red {
+  background-color: red;
+  color: white;
+}
+.yellow {
+  background-color: yellow;
+}
+</style>
+<table>
+   <tr>
+      <td></td>
+      <td colspan="3">Key position</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+   </tr>
+   <tr>
+      <td>Comm</td>
+      <td>Normal</td>
+      <td>Service</td>
+      <td>Lockout</td>
+      <td>Coral Shtdwn</td>
+      <td>Problem Reported</td>
+      <td>Coral Enabled</td>
+      <td class="blue">Blue LED </td>
+      <td class="green">Green LED</td>
+      <td class="yellow">Yellow LED</td>
+      <td class="red">Red LED</td>
+      <td></td>
+      <td>State</td>
+   </tr>
+   <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td class="blue"></td>
+      <td class="green">on</td>
+      <td class="yellow"></td>
+      <td class="red"></td>
+      <td>ok</td>
+      <td>1</td>
+   </tr>
+   <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td class="blue">on</td>
+      <td class="green">on</td>
+      <td class="yellow"></td>
+      <td class="red"></td>
+      <td>ok - user running</td>
+      <td>2</td>
+   </tr>
+   <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td class="blue"></td>
+      <td class="green"></td>
+      <td class="yellow">on</td>
+      <td class="red"></td>
+      <td>problem</td>
+      <td>3</td>
+   </tr>
+   <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td class="blue">on</td>
+      <td class="green"></td>
+      <td class="yellow">on</td>
+      <td class="red"></td>
+      <td>problem - user running</td>
+      <td>4</td>
+   </tr>
+   <tr>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>x</td>
+      <td>0</td>
+      <td class="blue">Blink</td>
+      <td class="green"></td>
+      <td class="yellow">on</td>
+      <td class="red"></td>
+      <td>under repair</td>
+      <td>5</td>
+   </tr>
+   <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>x</td>
+      <td class="blue">Blink</td>
+      <td class="green">Blink</td>
+      <td class="yellow"></td>
+      <td class="red"></td>
+      <td>Indeterminate state after regaining comm</td>
+      <td>6</td>
+   </tr>
+   <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="blue"></td>
+      <td class="green"></td>
+      <td class="yellow"></td>
+      <td class="red"></td>
+      <td> - returning from "user running - before comm lost"</td>
+      <td></td>
+   </tr>
+   <tr>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td class="blue"></td>
+      <td class="green"></td>
+      <td class="yellow"></td>
+      <td class="red">on</td>
+      <td>key forced shutdown</td>
+      <td>7</td>
+   </tr>
+   <tr>
+      <td>1</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td>1</td>
+      <td>x</td>
+      <td>x</td>
+      <td class="blue"></td>
+      <td class="green"></td>
+      <td class="yellow"></td>
+      <td class="red">Blink</td>
+      <td>Coral forced shutdown</td>
+      <td>8</td>
+   </tr>
+   <tr>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>x</td>
+      <td>x</td>
+      <td class="blue">Blink</td>
+      <td class="green"></td>
+      <td class="yellow"></td>
+      <td class="red">on</td>
+      <td>under repair during Coral forced shutdown</td>
+      <td>9</td>
+   </tr>
+   <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="blue"></td>
+      <td class="green"></td>
+      <td class="yellow"></td>
+      <td class="red"></td>
+      <td>No Comm States Below</td>
+      <td></td>
+   </tr>
+   <tr>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td class="blue"></td>
+      <td class="green"></td>
+      <td class="yellow">Blink</td>
+      <td class="red"></td>
+      <td>not in use before comm lost</td>
+      <td></td>
+   </tr>
+   <tr>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td class="blue">on</td>
+      <td class="green"></td>
+      <td class="yellow">Blink</td>
+      <td class="red"></td>
+      <td>user running - before comm lost</td>
+      <td></td>
+   </tr>
+   <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td class="blue">Blink</td>
+      <td class="green"></td>
+      <td class="yellow">Blink</td>
+      <td class="red"></td>
+      <td>override or under repair</td>
+      <td></td>
+   </tr>
+   <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td class="blue"></td>
+      <td class="green"></td>
+      <td class="yellow">Blink</td>
+      <td class="red">on</td>
+      <td>key forced shutdown</td>
+      <td></td>
+   </tr>
+</table>
+
+
+</body>
+</html>
