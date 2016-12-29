@@ -38,7 +38,12 @@ class FlaskWebThread(threading.Thread):
         self.logger.debug("Got status command")
         command = interlockcommands.ReadState()
         response = self.sendCommand(command)
-        buffer = render_template('status.html',
+        if request.headers['Content-Type'] == 'application/json' or \
+            request.headers['Accept'] == 'application/json':
+            status = self.interpret_response(response.data)
+            buffer = json.dumps({"status": status})
+        else:
+            buffer = render_template('status.html',
                                  data=print_bytes(response.data),
                                  cmd='status')
         return buffer
@@ -60,7 +65,11 @@ class FlaskWebThread(threading.Thread):
             command = interlockcommands.EnterState(2)
 
         response = self.sendCommand(command)
-        buffer = render_template('enable.html',
+        if request.headers['Content-Type'] == 'application/json' or \
+            request.headers['Accept'] == 'application/json':
+            buffer = json.dumps({"status": "unlocked"})
+        else:
+            buffer = render_template('enable.html',
                                  data=print_bytes(response.data),
                                  cmd='enable')
         return buffer
@@ -80,7 +89,11 @@ class FlaskWebThread(threading.Thread):
             command = interlockcommands.EnterState(1)
 
         response = self.sendCommand(command)
-        buffer = render_template('enable.html',
+        if request.headers['Content-Type'] == 'application/json' or \
+            request.headers['Accept'] == 'application/json':
+            buffer = json.dumps({"status": "locked"})
+        else:
+            buffer = render_template('enable.html',
                                  data=print_bytes(response.data),
                                  cmd='disable')
         return buffer
@@ -157,4 +170,17 @@ class FlaskWebThread(threading.Thread):
         self.shutdown_flask()
         self.logger.debug("shutdown request sent")
         threading.Thread.join(self)
+
+    def interpret_response(self, data):
+        unlocked_states = [2,4,5,9]
+        locked_states = [1, 3, 7, 8]
+        if len(data) == 2 and data[0] == 85:
+            if data[1] in unlocked_states:
+                return "unlocked"
+            elif data[1] in locked_states:
+                return "locked"
+            else:
+                return "unknown"
+        else:
+            return "unknown"
 

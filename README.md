@@ -26,9 +26,9 @@ API:
 ---
 The service responds to POST commands to control the box.  Example:
 
-    curl -X POST -u admin:password http://localhost:55009/sense
-    curl -X POST -u admin:password http://localhost:55009/enable
-    curl -X POST -u admin:password http://localhost:55009/disable
+    curl -H 'Accept: application/json' -X POST -u admin:mySecretPassword http://localhost:55009/sense
+    curl -H 'Accept: application/json' -X POST -u admin:mySecretPassword http://localhost:55009/enable
+    curl -H 'Accept: application/json' -X POST -u admin:mySecretPassword http://localhost:55009/disable
 
 
 Browser Access:
