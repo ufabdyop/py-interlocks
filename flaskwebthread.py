@@ -10,7 +10,7 @@ import requests
 import random, string
 
 class FlaskWebThread(threading.Thread):
-    def __init__(self, queues, host, port, username, password):
+    def __init__(self, queues, port, username, password):
         self.credentials = [{"username":username, "password":password}]
         self.app = Flask(__name__)
         self.app.debug = False
@@ -18,7 +18,7 @@ class FlaskWebThread(threading.Thread):
         self.cmd_q = queues['in']
         self.reply_q = queues['out']
         self.logger = logging.getLogger('app')
-        self.host = host
+        self.host = '0.0.0.0'
         self.port = port
         self.shutdown_pass = self.random_string()
 

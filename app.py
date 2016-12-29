@@ -36,8 +36,8 @@ class InterlockApp(object):
     def check_args(self):
         if len(sys.argv) != 4:
             print("Usage:")
-            print("app.py host port password")
-            print("eg. app.py 0.0.0.0 55009 mySecret")
+            print("app.py interlockbox-ip port password")
+            print("eg. app.py 10.0.0.5 55009 mySecret")
             sys.exit(1)
         self.interlock_host = sys.argv[1]
         self.web_port = int(sys.argv[2])
@@ -75,7 +75,7 @@ class InterlockApp(object):
 
     def start_threads(self):
         self.timer = TimerThread(self.cmd_queues['TIMER_THREAD'], self.alive)
-        self.web = FlaskWebThread(self.cmd_queues['WEB_THREAD'], self.interlock_host, self.web_port,
+        self.web = FlaskWebThread(self.cmd_queues['WEB_THREAD'], self.web_port,
                                   'admin', self.password)
         self.timer.start()
         self.web.start()
