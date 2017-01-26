@@ -43,8 +43,7 @@ class FlaskWebThread(threading.Thread):
         self.logger.debug("Got status command")
         command = interlockcommands.ReadState()
         response = self.sendCommand(command)
-        if request.headers['Content-Type'] == 'application/json' or \
-            request.headers['Accept'] == 'application/json':
+        if self.is_json():
             status = self.interpret_response(response.data)
             buffer = json.dumps({"status": status})
         else:
@@ -70,8 +69,7 @@ class FlaskWebThread(threading.Thread):
             command = interlockcommands.EnterState(2)
 
         response = self.sendCommand(command)
-        if request.headers['Content-Type'] == 'application/json' or \
-            request.headers['Accept'] == 'application/json':
+        if self.is_json():
             buffer = json.dumps({"status": "unlocked"})
         else:
             buffer = render_template('enable.html',
@@ -94,14 +92,20 @@ class FlaskWebThread(threading.Thread):
             command = interlockcommands.EnterState(1)
 
         response = self.sendCommand(command)
-        if request.headers['Content-Type'] == 'application/json' or \
-            request.headers['Accept'] == 'application/json':
+        if self.is_json():
             buffer = json.dumps({"status": "locked"})
         else:
             buffer = render_template('enable.html',
                                  data=print_bytes(response.data),
                                  cmd='disable')
         return buffer
+
+    def is_json(self):
+        json = False
+        if request.headers.get('Content-Type', False) == 'application/json' or \
+            request.headers.get('Accept', False) == 'application/json':
+            json = True
+        return json
 
     def run(self):
         self.setupRoutes()
