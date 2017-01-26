@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Interlock Boxes</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+<p>
+                            
+		<h3>Interlock Boxes</h3>
+		<p>You may have noticed that several of the tools in the nanofab have interlock boxes attached to them.  These boxes have been deployed in order to enforce the requirement that each tool be enabled in coral before use.  Once a tool has been enabled in coral, a signal is sent to the associated interlock box that allows the tool to be run.  Below is a picture of one of these boxes:<br/><br/><img src="images/interlock_box.jpg" alt="Interlock Box" /></p> 
+		<br/>
+		<p>The box displays four LED lights to indicate the state that the machine is in.  These are intended to make it easy to tell if a machine is currently in use by a lab member and what service state the machine is in.  </p>
+		<br/>
+		<p>You will also notice that there is a key switch attached to each of the interlock boxes.  This switch can be turned to "service" mode or "lock out" mode by any of the nanofab staff members.  Service mode overrides any coral settings and allows the tool to be run.  Lock out prevents any use of the tool.
+			<div id="interlocks_key">
+			<h3>Interlock Boxes LED Lights Key</h3>
+			<p style="padding-bottom: 10px;">Please consult the following table to determine the state of a machine based on its interlock box lights:</p>
+			<table cellpadding="5" border="1">
+			<tr>
+				<th class="first_column">Lights</th>
+				<th class="second_column">State of Machine</th>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/ok.gif" alt=""/></td>
+				<td class="second_column">Tool is up with no reported problems and is not currently in use.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/ok_user_running.gif" alt=""/></td>
+				<td class="second_column">Tool is running with no reported problems.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/problem.gif" alt=""/></td>
+				<td class="second_column">Tool is not currently running and has one or more problems reported in Coral.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/problem_user_running.gif" alt=""/></td>
+				<td class="second_column">Tool is currently running and has one or more problems reported in Coral.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/Coral_forced_shutdown.gif" alt=""/></td>
+				<td class="second_column">Tool is shutdown in Coral.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/key_forced_shutdown.gif" alt=""/></td>
+				<td class="second_column">Key is switched to "LOCK OUT" and cannot be run.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/not_in_use_before_comm_lost.gif" alt=""/></td>
+				<td class="second_column">Tool is not in use and interlock box cannot communicate with Coral.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/under_repair_during_Coral_forced_shutdown.gif" alt=""/></td>
+				<td class="second_column">Tool is under repair and has been shut down through Coral.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/under_repair.gif" alt=""/></td>
+				<td class="second_column">Interlock box is in service mode and tool is capable of running regardless of Coral state.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/override_or_under_repair.gif" alt=""/></td>
+				<td class="second_column">Interlock box is in service mode is capable of running, but is unable to communicate with coral.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/user_running_before_comm_lost.gif" alt=""/></td>
+				<td class="second_column">Tool is running, but cannot communicate with Coral.</td>
+			</tr>
+			<tr>
+				<td class="first_column"><img src="images/key_forced_shutdown_comm_lost.gif" alt=""/></td>
+				<td class="second_column">Key is switched to "LOCK OUT" and interlock box cannot communicate with Coral.</td>
+			</tr>
+
+			</table>
+			</div>
+			<!--
+		<ul>
+			<li>Machine is up, but currently not in use by a lab member: green light on, others off</li>
+			<li>Machine is up and in use by a lab member: green and blue lights on, others off</li>
+			<li>A problem has been reported for this machine, but it is still operable noting certain conditions*: yellow light on, blue light on if in use, off otherwise</li>
+			<li>Machine is down: red light on</li>
+		</ul>
+		</p>
+			-->
+				
+
+                        </p>
+    </body>
+</html>
+
