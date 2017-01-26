@@ -6,7 +6,7 @@ interlock boxes.
 
 Prerequisite:
 ---
-Requires flask (pip install flask)
+Requires flask and rocket (pip install flask, pip install rocket)
 
 Usage:
 ---
@@ -29,6 +29,11 @@ The service responds to POST commands to control the box.  Example:
     curl -H 'Accept: application/json' -X POST -u admin:mySecretPassword http://localhost:55009/sense
     curl -H 'Accept: application/json' -X POST -u admin:mySecretPassword http://localhost:55009/enable
     curl -H 'Accept: application/json' -X POST -u admin:mySecretPassword http://localhost:55009/disable
+
+
+API Documentation:
+---
+The swagger.yaml file uses the swagger standard for documenting REST APIs.
 
 
 Browser Access:

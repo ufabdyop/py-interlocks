@@ -8,11 +8,12 @@ from basecommands import ClientReply
 from logtools import print_bytes
 import requests
 import random, string
+from rocket import Rocket
 
 class FlaskWebThread(threading.Thread):
     def __init__(self, queues, port, username, password):
         self.credentials = [{"username":username, "password":password}]
-        self.app = Flask(__name__)
+        self.app = Flask(__name__, static_folder='static', static_path='/static', static_url_path='/static')
         self.app.debug = False
         self.authHelper = authenticator(self.credentials)
         self.cmd_q = queues['in']
@@ -21,6 +22,10 @@ class FlaskWebThread(threading.Thread):
         self.host = '0.0.0.0'
         self.port = port
         self.shutdown_pass = self.random_string()
+        self.server = None
+
+        rocketlog = logging.getLogger('Rocket')
+        rocketlog.setLevel(logging.INFO)
 
         super(FlaskWebThread, self).__init__()
 
@@ -101,7 +106,9 @@ class FlaskWebThread(threading.Thread):
     def run(self):
         self.setupRoutes()
         self.logger.debug('Flask Server Starting')
-        self.app.run(host=self.host, port=self.port)
+        self.server = Rocket((self.host, self.port), 'wsgi', {"wsgi_app": self.app})
+        self.server.start(background=False)
+        #self.app.run(host=self.host, port=self.port)
         self.logger.debug('Flask Server Stopping')
 
     def setupRoutes(self):
@@ -140,6 +147,20 @@ class FlaskWebThread(threading.Thread):
         def log_to_disable():
             return self.disable(request.form)
 
+        @self.app.route('/static', methods=['GET'])
+        @self.app.route('/static/', methods=['GET'])
+        @self.app.route('/', methods=['GET'])
+        def serve_static_index():
+            self.logger.debug('static asset')
+            return self.app.send_static_file('index.html')
+
+        @self.app.route('/swagger.yaml', methods=['GET'])
+        def swagger():
+            self.logger.debug('swagger yaml')
+            buffer = render_template('swagger.yaml',
+                                     host=request.host)
+            return buffer
+
         @self.app.route('/shutdown/<shutdown_pass>', methods=['POST'])
         def shutdown(shutdown_pass):
             if shutdown_pass == self.shutdown_pass:
@@ -167,7 +188,8 @@ class FlaskWebThread(threading.Thread):
 
     def join(self):
         self.logger.debug("shutting down")
-        self.shutdown_flask()
+        self.server.stop()
+        #self.shutdown_flask()
         self.logger.debug("shutdown request sent")
         threading.Thread.join(self)
 
