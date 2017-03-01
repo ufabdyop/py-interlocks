@@ -1,5 +1,6 @@
 from flask import request, Response
 from functools import wraps
+import json
 
 class authenticator:
     def __init__(self, credentials):
@@ -14,12 +15,15 @@ class authenticator:
                 return True
         return False
 
+    @property
     def authenticate(self):
         """Sends a 401 response that enables basic auth"""
         return Response(
-        'Could not verify your access level for that URL.\n'
-        'You have to login with proper credentials', 401,
-        {'WWW-Authenticate': 'Basic realm="Test Realm"'})
+            json.dumps({"status": "error",
+                        "message": "Could not verify your access level for that URL. \n"
+                                   "You have to login with proper credentials"}) + "\n"
+            , 401,
+            {'WWW-Authenticate': 'Basic realm="Test Realm"'})
 
     def passwordError(self):
         """Sends a 401 response"""
@@ -32,6 +36,6 @@ class authenticator:
         def decorated(*args, **kwargs):
             auth = request.authorization
             if not auth or not self.check_auth(auth.username, auth.password):
-                return self.authenticate()
+                return self.authenticate
             return f(*args, **kwargs)
         return decorated

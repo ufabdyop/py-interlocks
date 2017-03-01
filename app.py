@@ -34,13 +34,16 @@ class InterlockApp(object):
         self.check_args()
 
     def check_args(self):
-        if len(sys.argv) != 4:
+        if len(sys.argv) not in (4, 5):
             print("Usage:")
             print("app.py interlockbox-ip port password")
             print("eg. app.py 10.0.0.5 55009 mySecret")
             sys.exit(1)
         self.interlock_host = sys.argv[1]
         self.web_port = int(sys.argv[2])
+        self.password = sys.argv[3]
+        if len(sys.argv) == 5:
+            InterlockApp.PORT = int(sys.argv[4])
         self.password = sys.argv[3]
 
     def run(self):

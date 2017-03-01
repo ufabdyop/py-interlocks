@@ -7,6 +7,7 @@ import interlockcommands
 from basecommands import ClientReply
 from logtools import print_bytes
 import requests
+from requests.auth import HTTPBasicAuth
 import random, string
 from rocket import Rocket
 
@@ -100,8 +101,42 @@ class FlaskWebThread(threading.Thread):
                                  cmd='disable')
         return buffer
 
+    def proxy(self, data):
+        #verify
+        shutdowns = data.get('shutdowns', 0)
+        shutdowns = int(shutdowns)
+        problems = data.get('problems', 0)
+        problems = int(problems)
+        scheme = data.get('scheme', 'http')
+        host = data['host']
+        port = data['port']
+        username = data.get('username', self.credentials[0]['username'])
+        password = data.get('password', self.credentials[0]['password']) #since this method requires authentication, this should be okay
+        command = data['command']
+
+        if command not in ["status", "sense", "enable", "disable", "unlock", "lock"]:
+            return Response(
+                '{"status": "error", "message": "no such command"}', 404)
+
+        if scheme not in ["http", "https"]:
+            return Response(
+                '{"status": "error", "message": "no such scheme"}', 404)
+
+        headers = {'Content-type': 'application/json'}
+        json_data = {"shutdowns": shutdowns, "problems": problems}
+        url = '%s://%s:%s/%s' % (scheme, host, port, command)
+        auth = HTTPBasicAuth(username, password)
+        self.logger.debug("Proxying request: %s, %s, %s, %s" % (url, command, shutdowns, problems))
+        response = requests.post(url, data=json_data, headers=headers, auth=auth)
+        self.logger.debug("Got response code %s " % response.status_code)
+        return Response(response.text, response.status_code)
+
     def is_json(self):
+        self.logger.debug("IS JSON?")
+        self.logger.debug("Accept header: " + request.headers.get("Accept", ""));
+        self.logger.debug("Content-Type header: " + request.headers.get("Content-Type", ""));
         json = False
+
         if request.headers.get('Content-Type', False) == 'application/json' or \
             request.headers.get('Accept', False) == 'application/json':
             json = True
@@ -164,6 +199,11 @@ class FlaskWebThread(threading.Thread):
             buffer = render_template('swagger.yaml',
                                      host=request.host)
             return buffer
+
+        @self.app.route('/proxy', methods=['POST'])
+        @self.authHelper.requires_auth
+        def proxy():
+            return self.proxy(request.get_json())
 
         @self.app.route('/shutdown/<shutdown_pass>', methods=['POST'])
         def shutdown(shutdown_pass):

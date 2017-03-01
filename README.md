@@ -33,7 +33,8 @@ The service responds to POST commands to control the box.  Example:
 
 API Documentation:
 ---
-The swagger.yaml file uses the swagger standard for documenting REST APIs.
+The swagger.yaml file uses the swagger standard for documenting REST APIs.  
+Served up on http://localhost:55009/swagger.yaml (or configured port).
 
 
 Browser Access:

@@ -1,4 +1,4 @@
-import socket, pprint, time
+import socket, pprint, time, sys
 from logtools import print_bytes
 
 class FakeInterlockBox(object):
@@ -139,5 +139,9 @@ class FakeInterlockBox(object):
             self.conn.close()
         self.conn.close()
 
-box = FakeInterlockBox()
+port = 2101
+if len(sys.argv) > 1:
+	port = int(sys.argv[1])
+
+box = FakeInterlockBox(port=port)
 box.main()
