@@ -183,7 +183,7 @@ class FlaskWebThread(threading.Thread):
 
         @self.app.route('/lock', methods=['POST'])
         @self.authHelper.requires_auth
-        def log_to_disable():
+        def lock_to_disable():
             return self.disable(request.form)
 
         @self.app.route('/static', methods=['GET'])
